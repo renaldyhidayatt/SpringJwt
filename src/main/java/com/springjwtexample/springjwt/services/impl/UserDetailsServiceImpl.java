@@ -1,4 +1,4 @@
-package com.springjwtexample.springjwt.services;
+package com.springjwtexample.springjwt.services.impl;
 
 import javax.transaction.Transactional;
 
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.springjwtexample.springjwt.models.User;
 import com.springjwtexample.springjwt.repository.UserRepository;
+import com.springjwtexample.springjwt.services.UserDetailsImpl;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

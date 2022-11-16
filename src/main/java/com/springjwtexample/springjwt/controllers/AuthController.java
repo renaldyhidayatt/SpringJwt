@@ -85,7 +85,6 @@ public class AuthController {
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
 
-        // Create new user's account
         User user = new User(registerRequest.getUsername(),
                 registerRequest.getEmail(),
                 encoder.encode(registerRequest.getPassword()));
