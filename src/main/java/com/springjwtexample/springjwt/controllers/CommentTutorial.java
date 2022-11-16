@@ -35,20 +35,27 @@ public class CommentTutorial {
     @GetMapping("/tutorials/{tutorialId}/comments")
     public ResponseEntity<List<Comment>> getAllCommentsByTutorialId(
             @PathVariable(value = "tutorialId") Long tutorialId) {
-        Tutorial tutorial = tutorialRepository.findById(tutorialId)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found Tutorial with id = " + tutorialId));
+        if (!tutorialRepository.existsById(tutorialId)) {
+            throw new ResourceNotFoundException("Not found Tutorial with id = " + tutorialId);
+        }
 
-        List<Comment> comments = new ArrayList<Comment>();
-        comments.addAll(tutorial.getComments());
-
+        List<Comment> comments = commentRepository.findByTutorialId(tutorialId);
         return new ResponseEntity<>(comments, HttpStatus.OK);
+    }
+
+    @GetMapping("/comments/{id}")
+    public ResponseEntity<Comment> getCommentsByTutorialId(@PathVariable(value = "id") Long id) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Comment with id = " + id));
+
+        return new ResponseEntity<>(comment, HttpStatus.OK);
     }
 
     @PostMapping("/tutorials/{tutorialId}/comments")
     public ResponseEntity<Comment> createComment(@PathVariable(value = "tutorialId") Long tutorialId,
             @RequestBody Comment commentRequest) {
         Comment comment = tutorialRepository.findById(tutorialId).map(tutorial -> {
-            tutorial.getComments().add(commentRequest);
+            commentRequest.setTutorial(tutorial);
             return commentRepository.save(commentRequest);
         }).orElseThrow(() -> new ResourceNotFoundException("Not found Tutorial with id = " + tutorialId));
 
@@ -75,12 +82,11 @@ public class CommentTutorial {
     @DeleteMapping("/tutorials/{tutorialId}/comments")
     public ResponseEntity<List<Comment>> deleteAllCommentsOfTutorial(
             @PathVariable(value = "tutorialId") Long tutorialId) {
-        Tutorial tutorial = tutorialRepository.findById(tutorialId)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found Tutorial with id = " + tutorialId));
+        if (!tutorialRepository.existsById(tutorialId)) {
+            throw new ResourceNotFoundException("Not found Tutorial with id = " + tutorialId);
+        }
 
-        tutorial.removeComments();
-        tutorialRepository.save(tutorial);
-
+        commentRepository.deleteByTutorialId(tutorialId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

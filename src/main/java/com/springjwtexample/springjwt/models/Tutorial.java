@@ -1,7 +1,12 @@
 package com.springjwtexample.springjwt.models;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -9,17 +14,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.GenerationType;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
-
 @Entity
 @Table(name = "tutorials")
 public class Tutorial {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tutorial_generator")
     private long id;
 
     @Column(name = "title")
@@ -34,6 +33,10 @@ public class Tutorial {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "tutorial_id")
     private Set<Comment> comments = new HashSet<>();
+
+    public Tutorial() {
+
+    }
 
     public Tutorial(String title, String description, boolean published) {
         this.title = title;
@@ -65,26 +68,13 @@ public class Tutorial {
         return published;
     }
 
-    public void setPublished(boolean published) {
-        this.published = published;
-    }
-
-    public Set<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(Set<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public void removeComments() {
-        this.comments.clear();
+    public void setPublished(boolean isPublished) {
+        this.published = isPublished;
     }
 
     @Override
     public String toString() {
-        return "Tutorial [id=" + id + ", title=" + title + ", description=" + description + ", published=" + published
-                + "]";
+        return "Tutorial [id=" + id + ", title=" + title + ", desc=" + description + ", published=" + published + "]";
     }
 
 }
