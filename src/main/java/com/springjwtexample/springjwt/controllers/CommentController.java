@@ -1,6 +1,5 @@
 package com.springjwtexample.springjwt.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springjwtexample.springjwt.exception.ResourceNotFoundException;
-import com.springjwtexample.springjwt.models.Tutorial;
 import com.springjwtexample.springjwt.models.Comment;
 import com.springjwtexample.springjwt.repository.CommentRepository;
 import com.springjwtexample.springjwt.repository.TutorialRepository;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 @RequestMapping("/api")
-public class CommentTutorial {
+public class CommentController {
     @Autowired
     private TutorialRepository tutorialRepository;
 

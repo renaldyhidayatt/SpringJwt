@@ -1,6 +1,5 @@
 package com.springjwtexample.springjwt.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,34 +13,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springjwtexample.springjwt.exception.ResourceNotFoundException;
 import com.springjwtexample.springjwt.models.Tutorial;
 import com.springjwtexample.springjwt.repository.TutorialRepository;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 @RequestMapping("/api")
 public class TutorialController {
+
     @Autowired
     TutorialRepository tutorialRepository;
 
     @GetMapping("/tutorials")
-    public ResponseEntity<List<Tutorial>> getAllTutorials(@RequestParam(required = false) String title) {
-        List<Tutorial> tutorials = new ArrayList<Tutorial>();
+    public ResponseEntity<List<Tutorial>> getAllTutorials() {
+        List<Tutorial> tutorial = this.tutorialRepository.findAll();
 
-        if (title == null)
-            tutorialRepository.findAll().forEach(tutorials::add);
-        else
-            tutorialRepository.findByTitleContaining(title).forEach(tutorials::add);
-
-        if (tutorials.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-
-        return new ResponseEntity<>(tutorials, HttpStatus.OK);
+        return new ResponseEntity<>(tutorial, HttpStatus.OK);
     }
 
     @GetMapping("/tutorials/{id}")

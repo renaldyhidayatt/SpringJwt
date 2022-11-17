@@ -3,16 +3,13 @@ package com.springjwtexample.springjwt.models;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.GenerationType;
 
 @Entity
 @Table(name = "tutorials")
@@ -30,8 +27,7 @@ public class Tutorial {
     @Column(name = "published")
     private boolean published;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "tutorial_id")
+    @OneToMany(mappedBy = "tutorial", targetEntity = Comment.class)
     private Set<Comment> comments = new HashSet<>();
 
     public Tutorial() {
@@ -76,5 +72,4 @@ public class Tutorial {
     public String toString() {
         return "Tutorial [id=" + id + ", title=" + title + ", desc=" + description + ", published=" + published + "]";
     }
-
 }
